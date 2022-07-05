@@ -1,0 +1,94 @@
+---
+###
+### security context constraints required to install the cluster essentials (carvel) secretgen-controller and
+### Tanzu Application Platform tap-gui, accelerator and app-live-view
+###
+### only to be used with the following service accounts
+### - system:serviceaccount:tap-gui:default
+### - system:serviceaccount:secretgen-controller:secretgen-controller-sa
+### - system:serviceaccount:app-live-view:default
+### - system:serviceaccount:accelerator-system:accelerator-controller-manager
+### - system:serviceaccount:accelerator-system:accelerator-server
+### - system:serviceaccount:accelerator-system:accelerator-engine
+
+
+###
+kind: SecurityContextConstraints
+apiVersion: security.openshift.io/v1
+metadata:
+  name: tap-scc-1
+
+###
+### values needed for the security context of the tap-gui-scc
+###
+runAsUser:
+  type: MustRunAs
+  uid: 1000
+fsGroup:
+  type: RunAsAny
+
+###
+### required values in a security context
+###
+allowHostDirVolumePlugin: false
+allowHostIPC: false
+allowHostNetwork: false
+allowHostPID: false
+allowHostPorts: false
+allowPrivilegedContainer: false
+readOnlyRootFilesystem: false
+seLinuxContext:
+  type: MustRunAs
+
+---
+###
+### role for binding serviceaccount to constraint
+###
+### reference for binding serviceaccount to constraint
+### https://docs.openshift.com/container-platform/4.6/authentication/managing-security-context-constraints.html#role-based-access-to-ssc_configuring-internal-oauth
+###
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: tap-scc-1-cluster-role
+rules:
+  - apiGroups:
+      - security.openshift.io
+    resourceNames:
+      - tap-scc-1
+    resources:
+      - securitycontextconstraints
+    verbs:
+      - use
+---
+###
+### role binding for binding serviceaccount to constraint
+###
+apiVersion: rbac.authorization.k8s.io/v1
+# This cluster role binding grants the "default" service accounts in the tap-gui namespace membership to ClusterRole tap-gui-scc-role
+kind: ClusterRoleBinding
+metadata:
+  name: tap-scc-1-cluster-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tap-scc-1-cluster-role
+subjects:
+  - kind: ServiceAccount
+    namespace: tap-gui
+    name: default
+  - kind: ServiceAccount
+    name: secretgen-controller-sa
+    namespace: secretgen-controller
+  - kind: ServiceAccount
+    namespace: app-live-view
+    name: default
+  - kind: ServiceAccount
+    namespace: accelerator-system
+    name: accelerator-controller-manager
+  - kind: ServiceAccount
+    namespace: accelerator-system
+    name: accelerator-server
+  - kind: ServiceAccount
+    namespace: accelerator-system
+    name: accelerator-engine

@@ -1,0 +1,70 @@
+---
+###
+###  required for the daemonset envoy in the tanzu-system-ingress namespace
+###
+### only to be used by the following serviceaccount
+### - system:serviceaccount:tanzu-system-ingress:envoy
+###
+###
+
+kind: SecurityContextConstraints
+apiVersion: security.openshift.io/v1
+metadata:
+  name: application-platform-envoy-scc
+
+###
+### values needed for the security context of the envoy daemon
+###
+allowHostPorts: true
+
+###
+### required values in a security context controller
+###
+allowHostDirVolumePlugin: false
+allowHostIPC: false
+allowHostNetwork: false
+allowHostPID: false
+allowPrivilegedContainer: false
+readOnlyRootFilesystem: false
+seLinuxContext:
+  type: MustRunAs
+runAsUser:
+  type: MustRunAsRange
+
+---
+###
+### role for binding serviceaccount to constraint
+###
+### reference for binding serviceaccount to constraint
+### https://docs.openshift.com/container-platform/4.6/authentication/managing-security-context-constraints.html#role-based-access-to-ssc_configuring-internal-oauth
+###
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: application-platform-envoy-cluster-role
+rules:
+  - apiGroups:
+      - security.openshift.io
+    resourceNames:
+      - application-platform-envoy-scc
+    resources:
+      - securitycontextconstraints
+    verbs:
+      - use
+---
+###
+### role binding for binding serviceaccount to constraint
+###
+apiVersion: rbac.authorization.k8s.io/v1
+# This cluster role binding grants "envoy" service account membership to Cluster Role application-platform-envoy-cluster-role
+kind: ClusterRoleBinding
+metadata:
+  name: application-platform-envoy-cluster-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: application-platform-envoy-cluster-role
+subjects:
+  - kind: ServiceAccount
+    namespace: tanzu-system-ingress
+    name: envoy

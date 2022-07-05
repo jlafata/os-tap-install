@@ -1,0 +1,42 @@
+#@ load("@ytt:data", "data")
+---
+profile: view
+ceip_policy_disclosed: true # Installation fails if this is set to 'false'
+
+tap_gui:
+  ingressEnabled: true
+  ingressDomain: #@ data.values.ingress.domain
+  service_type: ClusterIP # NodePort for distributions that don't support LoadBalancer
+  app_config:
+    backend:
+      baseUrl: #@ "http://tap-gui.{}".format(data.values.ingress.domain)
+      cors:
+        origin: #@ "http://tap-gui.{}".format(data.values.ingress.domain)
+    app:
+      baseUrl: #@ "http://tap-gui.{}".format(data.values.ingress.domain)
+    integrations:
+      github:
+        - host: #@ data.values.gitrepo.host
+          token: #@ data.values.gitrepo.token
+    catalog:
+      locations:
+        - type: url
+          target: #@ data.values.catalog.location
+
+contour:
+  envoy:
+    service:
+      type: LoadBalancer
+
+accelerator:
+  samples:
+    include: false
+
+
+excluded_packages:
+  - learningcenter.tanzu.vmware.com
+  - workshops.learningcenter.tanzu.vmware.com
+  - ootb-supply-chain-basic.tanzu.vmware.com
+  - scanning.apps.tanzu.vmware.com
+  - grype.scanning.apps.tanzu.vmware.com
+  - metadata-store.apps.tanzu.vmware.com
