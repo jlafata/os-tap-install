@@ -45,7 +45,7 @@ tanzu package repository \
   --namespace tap-install \
   get tanzu-tap-repository
 
-ytt -f "${script_dir}/tap-values.yaml" -f "${values_file}" --ignore-unknown-comments > "${generated_dir}/tap-values.yaml"
+ytt -f "${script_dir}/profile/tap-values.yaml" -f "${values_file}" --ignore-unknown-comments > "${generated_dir}/tap-values.yaml"
 
 tanzu package install tap \
   --namespace tap-install \
