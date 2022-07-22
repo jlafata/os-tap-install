@@ -1,0 +1,9 @@
+#@data/values
+---
+install_registry:
+  host: host.example.com/tap12    # registry host (and project if using harbor), from which to install tanzu clusters essentials
+  username: user@example.com      # username credentials to connect to registry to install tanzu clusters essentials
+  password: pass                  # p/w credentials  to connect to registry to install tanzu clusters essentials
+
+namespace_owner:
+  userId: userlogin               # login identity of user who will manage namespace

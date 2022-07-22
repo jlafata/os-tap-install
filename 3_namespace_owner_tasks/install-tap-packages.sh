@@ -13,19 +13,19 @@ mkdir -p "${generated_dir}"
 values_file_default="${script_dir}/profile/values.yaml"
 values_file=${VALUES_FILE:-$values_file_default}
 
-export INSTALL_REGISTRY_HOSTNAME=registry.tanzu.vmware.com
-export INSTALL_REGISTRY_USERNAME=$(yq '.tanzunet.username' < "${values_file}")
-export INSTALL_REGISTRY_PASSWORD=$(yq '.tanzunet.password' < "${values_file}")
+export INSTALL_REGISTRY_HOSTNAME=$(yq '.install_registry.host' < "${values_file}")
+export INSTALL_REGISTRY_USERNAME=$(yq '.install_registry.username' < "${values_file}")
+export INSTALL_REGISTRY_PASSWORD=$(yq '.install_registry.password' < "${values_file}")
 
-kapp deploy \
-  --app tap-install-ns \
-  --file <(\
-    kubectl create namespace tap-install \
-      --dry-run=client \
-      --output=yaml \
-      --save-config \
-    ) \
-  --yes
+#kapp deploy \
+#  --app tap-install-ns \
+#  --file <(\
+#    kubectl create namespace tap-install \
+#      --dry-run=client \
+#      --output=yaml \
+#      --save-config \
+#    ) \
+#  --yes
 
 tanzu secret registry \
   --namespace tap-install \
@@ -39,7 +39,7 @@ tanzu secret registry \
 tanzu package repository \
   --namespace tap-install \
   add tanzu-tap-repository \
-  --url registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.1.0
+  --url registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.2.0
 
 tanzu package repository \
   --namespace tap-install \
@@ -50,7 +50,7 @@ ytt -f "${script_dir}/profile/tap-values.yaml" -f "${values_file}" --ignore-unkn
 tanzu package install tap \
   --namespace tap-install \
   --package-name tap.tanzu.vmware.com \
-  --version 1.1.0 \
+  --version 1.2.0 \
   --values-file "${generated_dir}/tap-values.yaml"
 
 

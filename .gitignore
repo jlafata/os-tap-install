@@ -1,5 +1,7 @@
 .idea
-profile/values.yaml
+1_airgapped_preparation/profile/values.yaml
+2_cluster_admin_tasks/profile/values.yaml
+3_namespace_owner_tasks/profile/values.yaml
 generated
 tanzu
 tanzu-cluster-essentials
