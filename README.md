@@ -4,7 +4,10 @@ This github repository contains instructions and files required to install the a
 
 The instructions are broken out into tasks performed by 3 different personas: airgapped registry authority, cluster admin and namespace owner.  These could all be performed by the same person or different people depending on how privileges are assigned in your organization.
 
-All three personas need yq and cluster essentials cli installed
+All three personas need yq and cluster essentials cli installed.
+
+NOTE: As a prerequisite to installing cluster essentials, the cluster has to have visibility to the registry you are pulling from.
+
     
     * YQ is a tool to parse yaml files: to install yq, refer to this url 
         https://github.com/mikefarah/yq    

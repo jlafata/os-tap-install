@@ -1,9 +1,3 @@
-# os-tap-install
-
-This github repository contains instructions and files required to install the app-accelerator from the Tanzu Application Platform.  These instructions have been derived and tested to install the app-acclerator in Tanzu Application Platform 1.1.0 on openshift 4.10.9.  The instructions and contents could vary depending on the version of openshift and Tanzu Application Platform version 1.2. 
-
-NOTE: As a prerequisite to installing cluster essentials, the cluster has to have visibility to the registry you are pulling from.
-
 # Contents 
 ### cluster-admin tasks
 1. registry from which to install cluster essentials  
@@ -20,11 +14,13 @@ NOTE: As a prerequisite to installing cluster essentials, the cluster has to hav
 1. create a namespace and assign ownership to the user finishing the installation
     * (execute `./2_cluster_admin_tasks/namespace-creation.sh`)
 
-## SCC folder, roles and role bindings: restrictive SCC's to run the app accelerators
+### SCC folder
+Contains roles and role bindings: restrictive SCC's to run the app accelerators
 The contents of the folder scc were derived from the security context of the deployments for the application accelerator on openshift 4.10.9 
 
-## profile for cluster administration component installs
+### profile folder
+Contains configuration values used to install the Cluster Essentials
 
-
-# uninstall instructions
+# Cluster Essentials uninstall instructions
 kapp delete -a kapp-controller -n tanzu-cluster-essentials
+kapp delete -a secretgen-controller -n tanzu-cluster-essentials
