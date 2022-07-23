@@ -28,5 +28,5 @@ All three personas need yq and cluster essentials cli installed
 1. cluster admin tasks (create cluster, add SCC's, create namespaces, assign users/roles )
     * see [cluster Admin Tasks](./2_cluster_admin_tasks/README.md)
 1. namespace owner tasks (install TAP components)
-    * see [namespace owner Tasks](./2_cluster_admin_tasks/README.md)
+    * see [namespace owner Tasks](./3_namespace_owner_tasks/README.md)
 
