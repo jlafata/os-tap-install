@@ -40,3 +40,4 @@ excluded_packages:
   - scanning.apps.tanzu.vmware.com
   - grype.scanning.apps.tanzu.vmware.com
   - metadata-store.apps.tanzu.vmware.com
+  - tap-telemetry.tanzu.vmware.com 

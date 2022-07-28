@@ -74,6 +74,7 @@ roleRef:
   kind: ClusterRole
   name: tap-scc-1-cluster-role
 subjects:
+#v1.1
   - kind: ServiceAccount
     namespace: tap-gui
     name: default
@@ -92,3 +93,10 @@ subjects:
   - kind: ServiceAccount
     namespace: accelerator-system
     name: accelerator-engine
+#v1.2
+  - kind: ServiceAccount
+    namespace: tap-gui
+    name: tap-gui
+  - kind: ServiceAccount
+    namespace: tap-telemetry
+    name: informer

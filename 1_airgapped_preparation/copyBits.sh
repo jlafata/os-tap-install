@@ -11,7 +11,6 @@ values_file=${VALUES_FILE:-$values_file_default}
 [ -z "$1" ]        cd    && { echo "usage: copyBits darwin | linux "; exit 1; }
 
 
-echo "login to source and target repositories"
 export TARGET_REPOSITORY=$(yq '.airgapped_registry.host' < "${values_file}")
 export TARGET_REGISTRY_USERNAME=$(yq '.airgapped_registry.username' < "${values_file}")
 export TARGET_REGISTRY_PASSWORD=$(yq '.airgapped_registry.password' < "${values_file}")
@@ -38,14 +37,13 @@ export IMGPKG_REGISTRY_USERNAME=$INSTALL_REGISTRY_USERNAME
 export IMGPKG_REGISTRY_PASSWORD=$INSTALL_REGISTRY_PASSWORD
 ./tanzu-cluster-essentials/imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:$TAP_VERSION --to-tar=./tap1-2.tar  --include-non-distributable-layers
 
-#echo "## push TAP bundle to $TARGET_REPOSITORY (username: $IMGPKG_REGISTRY_USERNAME)"
+echo "## push TAP bundle to $TARGET_REPOSITORY (username: $IMGPKG_REGISTRY_USERNAME)"
 export IMGPKG_REGISTRY_HOSTNAME=$TARGET_REPOSITORY
 export IMGPKG_REGISTRY_USERNAME=$TARGET_REGISTRY_USERNAME
 export IMGPKG_REGISTRY_PASSWORD=$TARGET_REGISTRY_PASSWORD
 ./tanzu-cluster-essentials/imgpkg copy --tar ./tap1-2.tar --to-repo=$TARGET_REPOSITORY/tap1-2   --include-non-distributable-layers  --registry-ca-cert-path $TARGET_REGISTRY_CA_PATH
 
 echo "## pull Cluster essentials bundle from $INSTALL_REGISTRY_HOSTNAME (username: $INSTALL_REGISTRY_USERNAME)"
-#ver 1.2
 export IMGPKG_REGISTRY_HOSTNAME=$INSTALL_REGISTRY_HOSTNAME
 export IMGPKG_REGISTRY_USERNAME=$INSTALL_REGISTRY_USERNAME
 export IMGPKG_REGISTRY_PASSWORD=$INSTALL_REGISTRY_PASSWORD
@@ -56,7 +54,7 @@ export IMGPKG_REGISTRY_USERNAME=$TARGET_REGISTRY_USERNAME
 export IMGPKG_REGISTRY_PASSWORD=$TARGET_REGISTRY_PASSWORD
 ./tanzu-cluster-essentials/imgpkg copy --tar ./tanzu-cluster-essentials1-2.tar --to-repo=$TARGET_REPOSITORY/cluster-essentials-bundle      --include-non-distributable-layers  --registry-ca-cert-path $TARGET_REGISTRY_CA_PATH
 
-### cleaning up
+echo "cleaning up"
 rm tanzu-cluster-essentials-$1-amd64-1.2.0.tgz
 rm tanzu-cluster-essentials1-2.tar
 rm tap1-2.tar

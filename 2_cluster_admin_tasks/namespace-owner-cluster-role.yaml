@@ -1,0 +1,150 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: tap-install-cluster-role
+rules:
+### can we reduce/eliminate the need for this - trying to not need all verbs
+- apiGroups:
+  - '*'
+  resources:
+  - '*'
+  verbs:
+  - '*'
+### needed above to create clusterrole from within tap package install tap within ./3_namespace_owner_tasks/install-tap-packages
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - list
+  - watch
+  - get
+- apiGroups:
+  - secretgen.carvel.dev
+  resources:
+  - secretexports
+  verbs:
+  - '*'
+- apiGroups:
+  - packaging.carvel.dev
+  resources:
+  - packagerepositories
+  - packagerepositories/status
+  verbs:
+  - '*'
+- apiGroups:
+  - packaging.carvel.dev
+  resources:
+  - packageinstalls
+  - packageinstalls/status
+  - packageinstalls/finalizers
+  verbs:
+  - '*'
+- apiGroups:
+  - internal.packaging.carvel.dev
+  resources:
+  - internalpackagemetadatas
+  verbs:
+  - '*'
+- apiGroups:
+  - data.packaging.carvel.dev
+  resources:
+  - packagemetadatas
+  - packagemetadatas/status
+  verbs:
+  - '*'
+- apiGroups:
+  - internal.packaging.carvel.dev
+  resources:
+  - internalpackages
+  verbs:
+  - '*'
+- apiGroups:
+  - data.packaging.carvel.dev
+  resources:
+  - packages
+  - packages/status
+  verbs:
+  - '*'
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterroles
+  verbs:
+  - create
+  - update
+#needed?
+- apiGroups:
+  - kappctrl.k14s.io
+  resources:
+  - apps
+  - apps/status
+  verbs:
+  - '*'
+
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
+  - update
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts/token
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - '*'
+
+#needed?  these were from kapp-controller-cluster-flow which was similar
+#- apiGroups:
+#    - apiregistration.k8s.io
+#  resources:
+#    - apiservices
+#  verbs:
+#    - update
+#    - get
+#- apiGroups:
+#  - admissionregistration.k8s.io
+#  resources:
+#  - mutatingwebhookconfigurations
+#  verbs:
+#  - list
+#  - watch
+#- apiGroups:
+#  - admissionregistration.k8s.io
+#  resources:
+#  - validatingwebhookconfigurations
+#  verbs:
+#  - list
+#  - watch
+#- apiGroups:
+#  - authorization.k8s.io
+#  resources:
+#  - subjectaccessreviews
+#  verbs:
+#  - create
+#- apiGroups:
+#  - flowcontrol.apiserver.k8s.io
+#  resources:
+#  - prioritylevelconfigurations
+#  - flowschemas
+#  verbs:
+#  - list
+#  - watch
+
