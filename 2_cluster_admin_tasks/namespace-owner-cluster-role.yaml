@@ -10,7 +10,7 @@ rules:
   - '*'
   verbs:
   - '*'
-### needed above to create clusterrole from within tap package install tap within ./3_namespace_owner_tasks/install-tap-packages
+### needed above to create clusterrole from within `tanzu package install tap` within ./3_namespace_owner_tasks/install-tap-packages
 - apiGroups:
   - ""
   resources:
