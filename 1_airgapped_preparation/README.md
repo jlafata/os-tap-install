@@ -1,5 +1,5 @@
 #Contents
-### air-gapped preperation tasks
+### air-gapped preparation tasks
 1. identify internal registry to copy bits to for air-gapped install 
 1. cp values-example.yaml and configure appropriately for your environment
     * need to specify airgapped_registry host(with repository) and creds and tanzunet credentials
