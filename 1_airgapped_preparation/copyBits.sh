@@ -8,19 +8,25 @@ script_dir="$(cd $(dirname "$BASH_SOURCE[0]") && pwd)"
 values_file_default="${script_dir}/profile/values.yaml"
 values_file=${VALUES_FILE:-$values_file_default}
 
-[ -z "$1" ]  && { echo "usage: copyBits darwin | linux "; exit 1; }
-
+## NEED target environment for Cluster Essentials CLI components
+#[ -z "$1" ]  && { echo "usage: copyBits darwin | linux "; exit 1; }
+#
+#case "${1:linux}" in
+#	darwin) PRODUCT_ID=1263761;;
+#	linux) PRODUCT_ID=1263760;;
+#esac
+#
+#[ -z "$PRODUCT_ID" ]   && { echo "parameter 1 must be linux or darwin"; exit 1; }
+#
 
 export TARGET_REPOSITORY=$(yq '.airgapped_registry.host' < "${values_file}")
 export TARGET_REGISTRY_USERNAME=$(yq '.airgapped_registry.username' < "${values_file}")
 export TARGET_REGISTRY_PASSWORD=$(yq '.airgapped_registry.password' < "${values_file}")
-### this may only be needed if your CA is not in default trust store, i.e. custom ca,  letsencrypt ca or self-signed cert
 export TARGET_REGISTRY_CA_PATH=$(yq '.airgapped_registry.ca_path' < "${values_file}")
 
 [ -z "$TARGET_REPOSITORY" ] && { echo "airgapped_registry.host must be set in values.yaml"; exit 1; }
 [ -z "$TARGET_REGISTRY_USERNAME" ] && { echo "airgapped_registry.username must be set in values.yaml"; exit 1; }
 [ -z "$TARGET_REGISTRY_PASSWORD" ] && { echo "airgapped_registry.password must be set in values.yaml"; exit 1; }
-### this may only be needed if your CA is not in default trust store, i.e. custom ca,  letsencrypt ca or self-signed cert
 [ -z "$TARGET_REGISTRY_CA_PATH" ] && { echo "airgapped_registry.ca_path must be set in values.yaml"; exit 1; }
 
 export INSTALL_REGISTRY_HOSTNAME=registry.tanzu.vmware.com
@@ -35,13 +41,18 @@ echo "## pull TAP bundle from $INSTALL_REGISTRY_HOSTNAME (username: $INSTALL_REG
 export IMGPKG_REGISTRY_HOSTNAME=$INSTALL_REGISTRY_HOSTNAME
 export IMGPKG_REGISTRY_USERNAME=$INSTALL_REGISTRY_USERNAME
 export IMGPKG_REGISTRY_PASSWORD=$INSTALL_REGISTRY_PASSWORD
+
+case "${1:$TARGET_REGISTRY_CA_PATH}" in
+	none) CA_PATH="";;
+	$TARGET_REGISTRY_CA_PATH) CA_PATH=--registry-ca-cert-path $TARGET_REGISTRY_CA_PATH;;
+esac
 ./tanzu-cluster-essentials/imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:$TAP_VERSION --to-tar=./tap1-2.tar  --include-non-distributable-layers
 
 echo "## push TAP bundle to $TARGET_REPOSITORY (username: $IMGPKG_REGISTRY_USERNAME)"
 export IMGPKG_REGISTRY_HOSTNAME=$TARGET_REPOSITORY
 export IMGPKG_REGISTRY_USERNAME=$TARGET_REGISTRY_USERNAME
 export IMGPKG_REGISTRY_PASSWORD=$TARGET_REGISTRY_PASSWORD
-./tanzu-cluster-essentials/imgpkg copy --tar ./tap1-2.tar --to-repo=$TARGET_REPOSITORY/tap1-2   --include-non-distributable-layers  --registry-ca-cert-path $TARGET_REGISTRY_CA_PATH
+./tanzu-cluster-essentials/imgpkg copy --tar ./tap1-2.tar --to-repo=$TARGET_REPOSITORY/tap1-2   --include-non-distributable-layers  $CA_PATH
 
 echo "## pull Cluster essentials bundle from $INSTALL_REGISTRY_HOSTNAME (username: $INSTALL_REGISTRY_USERNAME)"
 export IMGPKG_REGISTRY_HOSTNAME=$INSTALL_REGISTRY_HOSTNAME
@@ -52,9 +63,9 @@ echo "## push Cluster essentials bundle to $TARGET_REPOSITORY (username: $IMGPKG
 export IMGPKG_REGISTRY_HOSTNAME=$TARGET_REPOSITORY
 export IMGPKG_REGISTRY_USERNAME=$TARGET_REGISTRY_USERNAME
 export IMGPKG_REGISTRY_PASSWORD=$TARGET_REGISTRY_PASSWORD
-./tanzu-cluster-essentials/imgpkg copy --tar ./tanzu-cluster-essentials1-2.tar --to-repo=$TARGET_REPOSITORY/cluster-essentials-bundle      --include-non-distributable-layers  --registry-ca-cert-path $TARGET_REGISTRY_CA_PATH
+./tanzu-cluster-essentials/imgpkg copy --tar ./tanzu-cluster-essentials1-2.tar --to-repo=$TARGET_REPOSITORY/cluster-essentials-bundle      --include-non-distributable-layers  $CA_PATH
 
 echo "cleaning up"
-rm tanzu-cluster-essentials-$1-amd64-1.2.0.tgz
+#rm tanzu-cluster-essentials-$1-amd64-1.2.0.tgz
 rm tanzu-cluster-essentials1-2.tar
 rm tap1-2.tar

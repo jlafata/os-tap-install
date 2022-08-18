@@ -2,8 +2,10 @@
 ---
 airgapped_registry:
   host: host.example.com      #  registry host, for air-gapped install, used in copy bits to relocate bits to your repository
-# may only be needed for ca not in default trust store,
-#  ca_path: /etc/docker/certs.d/host.example.com/ca.crt  # optional ca_path for connection to airgapped_registry
+# needed when ca of target registry not in default trust store,
+# specify none if not needed
+#  ca_path: /etc/docker/certs.d/host.example.com/ca.crt
+  ca_path: none
   username: user@example.com  #  registry user, for air-gapped install, used in copy bits to relocate bits to your repository
   password: pass              #  registry user p/w, for air-gapped install, used in copy bits to relocate bits to your repository
 tanzunet:
