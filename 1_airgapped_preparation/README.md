@@ -1,4 +1,5 @@
-#Contents
+# Contents
+
 ### air-gapped preparation tasks
 1. identify internal registry to copy bits to for air-gapped install 
 1. cp values-example.yaml and configure appropriately for your environment
