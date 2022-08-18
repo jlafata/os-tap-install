@@ -8,7 +8,7 @@ script_dir="$(cd $(dirname "$BASH_SOURCE[0]") && pwd)"
 values_file_default="${script_dir}/profile/values.yaml"
 values_file=${VALUES_FILE:-$values_file_default}
 
-[ -z "$1" ]        cd    && { echo "usage: copyBits darwin | linux "; exit 1; }
+[ -z "$1" ]  && { echo "usage: copyBits darwin | linux "; exit 1; }
 
 
 export TARGET_REPOSITORY=$(yq '.airgapped_registry.host' < "${values_file}")
