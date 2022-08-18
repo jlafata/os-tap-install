@@ -3,14 +3,14 @@ kind: ClusterRole
 metadata:
   name: tap-install-cluster-role
 rules:
-### can we reduce/eliminate the need for this - trying to not need all verbs
+### start of portion needed to create clusterrole from within `tanzu package install tap` within ./3_namespace_owner_tasks/install-tap-packages
 - apiGroups:
   - '*'
   resources:
   - '*'
   verbs:
   - '*'
-### needed above to create clusterrole from within `tanzu package install tap` within ./3_namespace_owner_tasks/install-tap-packages
+### end of portion needed to create clusterrole from within `tanzu package install tap` within ./3_namespace_owner_tasks/install-tap-packages
 - apiGroups:
   - ""
   resources:
@@ -110,41 +110,4 @@ rules:
   - configmaps
   verbs:
   - '*'
-
-#needed?  these were from kapp-controller-cluster-flow which was similar
-#- apiGroups:
-#    - apiregistration.k8s.io
-#  resources:
-#    - apiservices
-#  verbs:
-#    - update
-#    - get
-#- apiGroups:
-#  - admissionregistration.k8s.io
-#  resources:
-#  - mutatingwebhookconfigurations
-#  verbs:
-#  - list
-#  - watch
-#- apiGroups:
-#  - admissionregistration.k8s.io
-#  resources:
-#  - validatingwebhookconfigurations
-#  verbs:
-#  - list
-#  - watch
-#- apiGroups:
-#  - authorization.k8s.io
-#  resources:
-#  - subjectaccessreviews
-#  verbs:
-#  - create
-#- apiGroups:
-#  - flowcontrol.apiserver.k8s.io
-#  resources:
-#  - prioritylevelconfigurations
-#  - flowschemas
-#  verbs:
-#  - list
-#  - watch
 

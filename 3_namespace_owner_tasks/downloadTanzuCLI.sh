@@ -21,7 +21,3 @@ esac
 echo "## downloading tanzu framework cli"
 pivnet download-product-files --product-slug='tanzu-application-platform' --release-version='1.2.1-build.3' --product-file-id=$PRODUCT_ID
 
-# can exit here - don't really need to do these now - have it just to test
-# exit
-#mkdir tanzu
-#tar -xvf "tanzu-framework-$1-amd64.tar" -C tanzu
