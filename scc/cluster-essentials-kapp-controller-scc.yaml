@@ -52,8 +52,8 @@ volumes:
   - projected
   - secret
 
----
 ###
+---
 ### cluster role for binding serviceaccount to constraint
 ###
 ### reference for binding serviceaccount to constraint
@@ -73,15 +73,6 @@ rules:
       - securitycontextconstraints
     verbs:
       - use
-### necessary until pull request to include finalizers in the apiGroup Resource rules is released
-  - apiGroups:
-      - packaging.carvel.dev
-    resources:
-      - packageinstalls
-      - packageinstalls/status
-      - packageinstalls/finalizers
-    verbs:
-      - '*'
 ---
 ###
 ### role binding for binding serviceaccount to constraint
@@ -100,5 +91,3 @@ subjects:
   - kind: ServiceAccount
     name: kapp-controller-sa
     namespace: kapp-controller
-
-
