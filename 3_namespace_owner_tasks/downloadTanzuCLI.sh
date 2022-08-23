@@ -19,5 +19,5 @@ esac
 ### user must have previously logged in to pivnet with `pivnet login --api-token=<api-token>` or can download this from tanzunet manually
 ### see README.MD for pivnet api login instructions
 echo "## downloading tanzu framework cli"
-pivnet download-product-files --product-slug='tanzu-application-platform' --release-version='1.2.1-build.3' --product-file-id=$PRODUCT_ID
+pivnet download-product-files --product-slug='tanzu-application-platform' --release-version='1.2.1' --product-file-id=$PRODUCT_ID
 

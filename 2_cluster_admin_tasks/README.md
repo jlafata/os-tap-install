@@ -11,7 +11,7 @@
     * (execute `./2_cluster_admin_tasks/apply-openshift-SCCs.sh`)
 1. Install Cluster Essentials (execute `./2_cluster_admin_tasks/install-cluster-essentials.sh <environment>`)
     * this step deploys the kapp controller and secretsgen controller components of the Tanzu cluster essentials
-#use oc to create project by namespace owner
+#allow owner to use oc to create project and grant permissions in tanzu package install  
 1. grant permissions to name space owner required to the user finishing the installation
     * (execute `./2_cluster_admin_tasks/permission-to-install.sh`)
 

@@ -12,4 +12,3 @@ values_file=${VALUES_FILE:-$values_file_default}
 kapp deploy  --app tap-install-ns-cluster-role   --file  ./2_cluster_admin_tasks/namespace-owner-cluster-role.yaml  --yes
 export NAMESPACE_OWNER=$(yq '.namespace_owner.user_id' < "${values_file}")
 kapp deploy  --app tap-install-ns-cluster-role-binding   --file <(   kubectl create clusterrolebinding tap-install-cluster-role-binding --clusterrole="tap-install-cluster-role" --user=$NAMESPACE_OWNER  --dry-run=client --output=yaml  --save-config )  --yes
-#kapp deploy  --app tap-install-os-ns-cluster-role-binding   --file <(   kubectl create clusterrolebinding tap-install-os-cluster-role-binding --clusterrole="tap-install-os-cluster-role" --user=$NAMESPACE_OWNER  --dry-run=client --output=yaml  --save-config )  --yes

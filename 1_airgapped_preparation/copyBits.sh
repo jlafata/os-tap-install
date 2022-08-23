@@ -25,7 +25,7 @@ export INSTALL_REGISTRY_PASSWORD=$(yq '.tanzunet.password' < "${values_file}")
 [ -z "$INSTALL_REGISTRY_USERNAME" ] && { echo "tanzunet.username must be set in values.yaml"; exit 1; }
 [ -z "$INSTALL_REGISTRY_PASSWORD" ] && { echo "tanzunet.password must be set in values.yaml"; exit 1; }
 
-export TAP_VERSION=1.2.0
+export TAP_VERSION=1.2.1
 echo "## pull TAP bundle from $INSTALL_REGISTRY_HOSTNAME (username: $INSTALL_REGISTRY_USERNAME)"
 export IMGPKG_REGISTRY_HOSTNAME=$INSTALL_REGISTRY_HOSTNAME
 export IMGPKG_REGISTRY_USERNAME=$INSTALL_REGISTRY_USERNAME
@@ -37,25 +37,45 @@ then
 else
 	CA_PATH="--registry-ca-cert-path "$TARGET_REGISTRY_CA_PATH
 fi
-./tanzu-cluster-essentials/imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:$TAP_VERSION --to-tar=./tap1-2.tar  --include-non-distributable-layers
+./tanzu-cluster-essentials/imgpkg copy \
+  -b $IMGPKG_REGISTRY_HOSTNAME/tanzu-application-platform/tap-packages:$TAP_VERSION \
+  --to-tar tap-packages-1.2.1.tar \
+  --include-non-distributable-layers
 
 echo "## push TAP bundle to $TARGET_REPOSITORY (username: $IMGPKG_REGISTRY_USERNAME)"
 export IMGPKG_REGISTRY_HOSTNAME=$TARGET_REPOSITORY
 export IMGPKG_REGISTRY_USERNAME=$TARGET_REGISTRY_USERNAME
 export IMGPKG_REGISTRY_PASSWORD=$TARGET_REGISTRY_PASSWORD
-./tanzu-cluster-essentials/imgpkg copy --tar ./tap1-2.tar --to-repo=$TARGET_REPOSITORY/tap1-2   --include-non-distributable-layers  $CA_PATH
+./tanzu-cluster-essentials/imgpkg copy \
+  --tar tap-packages-1.2.1.tar \
+  --to-repo $IMGPKG_REGISTRY_HOSTNAME/tap-packages \
+  --include-non-distributable-layers $CA_PATH
+
 
 echo "## pull Cluster essentials bundle from $INSTALL_REGISTRY_HOSTNAME (username: $INSTALL_REGISTRY_USERNAME)"
 export IMGPKG_REGISTRY_HOSTNAME=$INSTALL_REGISTRY_HOSTNAME
 export IMGPKG_REGISTRY_USERNAME=$INSTALL_REGISTRY_USERNAME
 export IMGPKG_REGISTRY_PASSWORD=$INSTALL_REGISTRY_PASSWORD
-./tanzu-cluster-essentials/imgpkg copy -b registry.tanzu.vmware.com/tanzu-cluster-essentials/cluster-essentials-bundle@sha256:e00f33b92d418f49b1af79f42cb13d6765f1c8c731f4528dfff8343af042dc3e --to-tar=./tanzu-cluster-essentials1-2.tar      --include-non-distributable-layers
+./tanzu-cluster-essentials/imgpkg copy \
+    -b $IMGPKG_REGISTRY_HOSTNAME/tanzu-cluster-essentials/cluster-essentials-bundle@sha256:e00f33b92d418f49b1af79f42cb13d6765f1c8c731f4528dfff8343af042dc3e \
+    --to-tar tanzu-cluster-essentials1-2.tar \
+    --include-non-distributable-layers
+
 echo "## push Cluster essentials bundle to $TARGET_REPOSITORY (username: $IMGPKG_REGISTRY_USERNAME)"
 export IMGPKG_REGISTRY_HOSTNAME=$TARGET_REPOSITORY
 export IMGPKG_REGISTRY_USERNAME=$TARGET_REGISTRY_USERNAME
 export IMGPKG_REGISTRY_PASSWORD=$TARGET_REGISTRY_PASSWORD
-./tanzu-cluster-essentials/imgpkg copy --tar ./tanzu-cluster-essentials1-2.tar --to-repo=$TARGET_REPOSITORY/cluster-essentials-bundle      --include-non-distributable-layers  $CA_PATH
+./tanzu-cluster-essentials/imgpkg copy \
+    --tar tanzu-cluster-essentials1-2.tar \
+    --to-repo $IMGPKG_REGISTRY_HOSTNAME/cluster-essentials-bundle \
+    --include-non-distributable-layers  $CA_PATH
 
 echo "cleaning up"
 rm tanzu-cluster-essentials1-2.tar
-rm tap1-2.tar
+rm tap-packages-1.2.1.tar
+
+
+
+
+
+

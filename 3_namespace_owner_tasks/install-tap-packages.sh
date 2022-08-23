@@ -36,7 +36,7 @@ tanzu secret registry  \
 tanzu package repository \
   --namespace $INSTALL_NAMESPACE \
   add tanzu-tap-repository \
-  --url registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.2.0
+  --url registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.2.1
 
 tanzu package repository \
   --namespace $INSTALL_NAMESPACE \
@@ -48,7 +48,7 @@ ytt -f "${script_dir}/profile/tap-values.yaml" -f "${values_file}" --ignore-unkn
 tanzu package install tap \
   --namespace $INSTALL_NAMESPACE \
   --package-name tap.tanzu.vmware.com \
-  --version 1.2.0 \
+  --version 1.2.1 \
   --values-file "${generated_dir}/tap-values.yaml"
 
 exit

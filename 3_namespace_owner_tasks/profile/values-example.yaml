@@ -5,9 +5,9 @@ install_registry:
   ca_path: /etc/docker/certs.d/host.example.com # optional ca_path for connection to airgapped_registry
   username: user@example.com  # optional registry user, for air-gapped install, used in copy bits to relocate bits to your repository
   password: pass              # optional registry user p/w, for air-gapped install, used in copy bits to relocate bits to your repository
-tanzunet:
-  username: user@example.com   # for non-air-gapped install, pivnet login user
-  password: pass               # for non-air-gapped install, pivnet login password
+#tanzunet:
+#  username: user@example.com   # for non-air-gapped install, pivnet login user
+#  password: pass               # for non-air-gapped install, pivnet login password
 ceip_policy_disclosed: true    # Installation fails if this is set to 'false'
 ingress:
   domain: example.com         # domain name for UI components, can be subdomain(e.g. tap.aws.example.com) if you want to use subdomain of your configured hosted zone(e.g. aws.example.com), you have to change the "--domain-filter=" argument value for the external-dns Deployment in the ingress-config/external-dns.yaml to the hosted zone domain(e.g. aws.example.com) instead of the variable value (which is the subdomain)!
