@@ -1,6 +1,6 @@
 # os-tap-install
 
-This github repository contains instructions and files required to install the app-accelerator from the Tanzu Application Platform.  These instructions have been derived and tested to install the app-acclerator in Tanzu Application Platform 1.1.0 on openshift 4.10.9.  The instructions and contents could vary depending on the version of openshift and Tanzu Application Platform. 
+This github repository contains instructions and files required to install the app-accelerator from the Tanzu Application Platform.  These instructions have been derived and tested to install the app-acclerator in Tanzu Application Platform 1.2.1 on openshift 4.10.26.  The instructions and contents could vary depending on the version of openshift and Tanzu Application Platform. 
 
 # Contents 
 ## High level summary of install process
