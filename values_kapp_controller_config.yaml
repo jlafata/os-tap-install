@@ -1,0 +1,10 @@
+#@data/values
+#@overlay/match-child-defaults missing_ok=True
+---
+kappController:
+  config:
+    caCerts: ""
+    httpProxy: ""
+    httpsProxy: ""
+    noProxy: ""
+    dangerousSkipTLSVerify: "true"
