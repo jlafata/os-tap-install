@@ -22,6 +22,6 @@ export INSTALL_BUNDLE=jltestcr.azurecr.io/cluster-essentials-bundle@sha256:e00f3
 
 
 cd tanzu-cluster-essentials
-#./install.sh --yes
-../2_cluster_preparation_tasks/tanzu_cluster_essentials_with_overrides_install.sh --yes
+./install.sh --yes
+#../2_cluster_preparation_tasks/tanzu_cluster_essentials_with_overrides_install.sh --yes
 cd ..
